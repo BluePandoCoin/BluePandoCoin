@@ -7,10 +7,10 @@ import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Permit.sol";
 
 contract BluePando is ERC20, Ownable, ERC20Permit {
     address public deployer;
-    address public liquidityWallet;
+    address public marketingWallet;
     uint256 public constant DEPLOYER_ALLOCATION_PERCENT = 4;
-    uint256 public constant LIQUIDITY_WALLET_ALLOCATION_PERCENT = 4;
-    uint256 public constant CONTRACT_ALLOCATION_PERCENT = 92;
+    uint256 public constant MARKETING_WALLET_ALLOCATION_PERCENT = 1;
+    uint256 public constant CONTRACT_ALLOCATION_PERCENT = 95;
     uint256 public constant MAX_SUPPLY = 1000000000 * 10**18; // Maximum supply is 1 billion tokens
     string public metadataURI;
 
@@ -21,21 +21,21 @@ contract BluePando is ERC20, Ownable, ERC20Permit {
     uint256 public constant TRANSACTION_RATE_LIMIT = 1; // 1 transaction per second
     uint256 public constant DAILY_TRANSACTION_LIMIT = 100; // 100 transactions per day
 
-    constructor(address initialOwner, address _liquidityWallet, string memory _metadataURI)
+    constructor(address initialOwner, address _marketingWallet, string memory _metadataURI)
         ERC20("BluePando", "PANDO")
         Ownable(initialOwner)
         ERC20Permit("BluePando")
     {
         deployer = initialOwner;
-        liquidityWallet = _liquidityWallet;
+        marketingWallet = _marketingWallet;
         metadataURI = _metadataURI;
 
         uint256 deployerAllocation = (MAX_SUPPLY * DEPLOYER_ALLOCATION_PERCENT) / 100;
-        uint256 liquidityWalletAllocation = (MAX_SUPPLY * LIQUIDITY_WALLET_ALLOCATION_PERCENT) / 100;
-        uint256 contractAllocation = MAX_SUPPLY - deployerAllocation - liquidityWalletAllocation;
+        uint256 marketingWalletAllocation = (MAX_SUPPLY * MARKETING_WALLET_ALLOCATION_PERCENT) / 100;
+        uint256 contractAllocation = MAX_SUPPLY - deployerAllocation - marketingWalletAllocation;
 
         _mint(deployer, deployerAllocation);
-        _mint(liquidityWallet, liquidityWalletAllocation);
+        _mint(marketingWallet, marketingWalletAllocation);
         _mint(address(this), contractAllocation);
 
         require(totalSupply() <= MAX_SUPPLY, "Total supply exceeds maximum supply");
